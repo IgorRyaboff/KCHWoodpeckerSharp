@@ -181,7 +181,14 @@ namespace KCHWoodpecker
 
         private void btnFlushLogs_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("Дятел может подвиснуть на несколько секунд, не паникуйте)", "", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            DateTime started = DateTime.Now;
+#if DEBUG
+            FileStream lockTest = null;
+            if (MessageBox.Show($"Создать заблокированный файл?", "Отладка", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+            {
+                lockTest = new FileStream(Path.Combine(dir, "lockTest.console"), FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None);
+            }
+#endif
             btnFlushLogs.Text = "Удаляем логи ЕСТ...";
             btnFlushLogs.Enabled = false;
             StopSpectating();
@@ -189,19 +196,32 @@ namespace KCHWoodpecker
             {
                 if (fn.EndsWith(".console"))
                 {
-                    bool deleted = false;
-                    while (!deleted) try
+                    DateTime now = DateTime.Now;
+                    while (true) try
                         {
                             File.Delete(fn);
-                            deleted = true;
+                            break;
                         }
-                        catch { }
+                        catch {
+                            if ((DateTime.Now - now).TotalSeconds > 5)
+                            {
+                                MessageBox.Show($"Не удалось удалить файл \"{Path.GetFileName(fn)}\", программа держит его занятым", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                break;
+                            }
+                        }
                 }
             }
+            while ((DateTime.Now - started).TotalMilliseconds < 500) { }
             StartSpectating();
             btnFlushLogs.Text = "Появились задержки";
             btnFlushLogs.Enabled = true;
-            MessageBox.Show("Готово", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
+#if DEBUG
+            if (lockTest != null)
+            {
+                lockTest.Close();
+                File.Delete(Path.Combine(dir, "lockTest.console"));
+            }
+#endif
         }
     }
 

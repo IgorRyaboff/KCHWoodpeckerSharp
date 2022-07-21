@@ -60,6 +60,7 @@
             this.btnFlushLogs.Name = "btnFlushLogs";
             this.btnFlushLogs.Size = new System.Drawing.Size(224, 23);
             this.btnFlushLogs.TabIndex = 3;
+            this.btnFlushLogs.TabStop = false;
             this.btnFlushLogs.Text = "Появились задержки";
             this.btnFlushLogs.UseVisualStyleBackColor = true;
             this.btnFlushLogs.Click += new System.EventHandler(this.btnFlushLogs_Click);

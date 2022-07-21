@@ -153,7 +153,7 @@ namespace KCHWoodpecker
                     break;
                 default:
                     Log($"Unknown {prefix}*{number} {status}");
-                    MassSend($"action:{prefix}*{number} disconnected");
+                    //MassSend($"action:{prefix}*{number} disconnected");
                     break;
             }
         }

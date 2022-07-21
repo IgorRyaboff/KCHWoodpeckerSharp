@@ -85,7 +85,6 @@ namespace KCHWoodpecker
                 s.Seek(readFrom, SeekOrigin.Begin);
                 int length = (int)(readTo - readFrom);
                 if (length == 0) return;
-                //Log($"{readFrom} + {length} ({readTo - readFrom}) = {readTo}", "integrity");
                 byte[] buffer = new byte[length];
                 s.Read(buffer, 0, length);
                 string result = Encoding.Default.GetString(buffer);
@@ -108,7 +107,7 @@ namespace KCHWoodpecker
                 if (line.Contains("@192")) Log($"Something like phone: \"{line}\"");
                 if (line.Contains("pc-take-order")) Log($"Something like order: \"{line}\"");
                 if (line.StartsWith("CounterPathPhone:client_OnCallStatus: sip:")) ProcessPhone(line.Replace("CounterPathPhone:client_OnCallStatus: sip:", ""));
-                else if (line.StartsWith("{\"pc-take-order\":{\"id-service-level\":\"")) ProcessOrder();
+                else if (line.StartsWith("{\"pc-take-order\":{")) ProcessOrder();
             }
         }
 
@@ -157,11 +156,6 @@ namespace KCHWoodpecker
                     MassSend($"action:{prefix}*{number} disconnected");
                     break;
             }
-        }
-
-        private void btnReset_Click(object sender, EventArgs e)
-        {
-            MassSend("reset");
         }
 
         void Log(string msg, string file = "default", bool formatLine = true)

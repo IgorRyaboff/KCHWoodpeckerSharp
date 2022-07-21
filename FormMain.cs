@@ -67,8 +67,7 @@ namespace KCHWoodpecker
 
         void StartSpectating()
         {
-            if (watcher != null) watcher.Dispose();
-            string[] fns = Directory.GetFiles(dir);
+            if (watcher != null) watcher.EnableRaisingEvents = false;
             watcher = new FileSystemWatcher();
             watcher.Path = dir;
             watcher.Filter = "*.console";
@@ -91,6 +90,11 @@ namespace KCHWoodpecker
                 ProcessData(result);
             };
             Console.WriteLine("Watching " + dir);
+        }
+
+        void StopSpectating()
+        {
+            watcher.EnableRaisingEvents = false;
         }
 
         void ProcessData(string data)
@@ -153,7 +157,6 @@ namespace KCHWoodpecker
                     break;
                 default:
                     Log($"Unknown {prefix}*{number} {status}");
-                    //MassSend($"action:{prefix}*{number} disconnected");
                     break;
             }
         }
@@ -174,6 +177,31 @@ namespace KCHWoodpecker
                     File.Delete(fn);
                 }
             }
+        }
+
+        private void btnFlushLogs_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("Дятел может подвиснуть на несколько секунд, не паникуйте)", "", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            btnFlushLogs.Text = "Удаляем логи ЕСТ...";
+            btnFlushLogs.Enabled = false;
+            StopSpectating();
+            foreach (string fn in Directory.GetFiles(dir))
+            {
+                if (fn.EndsWith(".console"))
+                {
+                    bool deleted = false;
+                    while (!deleted) try
+                        {
+                            File.Delete(fn);
+                            deleted = true;
+                        }
+                        catch { }
+                }
+            }
+            StartSpectating();
+            btnFlushLogs.Text = "Появились задержки";
+            btnFlushLogs.Enabled = true;
+            MessageBox.Show("Готово", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
     }
 

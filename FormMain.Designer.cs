@@ -31,6 +31,7 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormMain));
             this.label1 = new System.Windows.Forms.Label();
             this.lblVer = new System.Windows.Forms.Label();
+            this.btnFlushLogs = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // label1
@@ -53,11 +54,22 @@
             this.lblVer.TabIndex = 2;
             this.lblVer.Text = "label2";
             // 
+            // btnFlushLogs
+            // 
+            this.btnFlushLogs.Location = new System.Drawing.Point(12, 51);
+            this.btnFlushLogs.Name = "btnFlushLogs";
+            this.btnFlushLogs.Size = new System.Drawing.Size(224, 23);
+            this.btnFlushLogs.TabIndex = 3;
+            this.btnFlushLogs.Text = "Появились задержки";
+            this.btnFlushLogs.UseVisualStyleBackColor = true;
+            this.btnFlushLogs.Click += new System.EventHandler(this.btnFlushLogs_Click);
+            // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(248, 57);
+            this.ClientSize = new System.Drawing.Size(248, 82);
+            this.Controls.Add(this.btnFlushLogs);
             this.Controls.Add(this.lblVer);
             this.Controls.Add(this.label1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
@@ -74,6 +86,7 @@
         #endregion
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label lblVer;
+        private System.Windows.Forms.Button btnFlushLogs;
     }
 }
 

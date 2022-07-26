@@ -225,5 +225,20 @@ namespace KCHWoodpecker
         }
     }
 
-    public class WSBehaviour : WebSocketBehavior { }
+    public class WSBehaviour : WebSocketBehavior {
+        protected override void OnOpen()
+        {
+            Thread t = new Thread(() =>
+            {
+                Send("action:0*0 connected");
+                Thread.Sleep(250);
+                Send("action:0*0 disconnected");
+                Thread.Sleep(250);
+                Send("action:0*0 connected");
+                Thread.Sleep(250);
+                Send("action:0*0 disconnected");
+            });
+            t.Start();
+        }
+    }
 }

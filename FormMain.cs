@@ -27,7 +27,7 @@ namespace KCHWoodpecker
             lblVer.Text = $"Версия {Application.ProductVersion}";
             if (Process.GetProcessesByName("KCHWoodpecker").Length > 1)
             {
-                MessageBox.Show("Дятел уже запущен", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Дятел уже запущен", $"Дятел {Application.ProductVersion}", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 Process.GetCurrentProcess().Kill();
             }
             Process p = FindESTProcess();
@@ -166,6 +166,8 @@ namespace KCHWoodpecker
             //formatLine ? $"\r\n[{DateTime.Now}] {msg}" : msg
             if (formatLine) msg = $"\r\n[{DateTime.Now}] {msg}";
             Console.Write(msg);
+
+#if DEBUG
             if (dir != null) File.AppendAllText(Path.Combine(dir, $"{DateTime.Now.ToShortDateString()}.{file}.wp.log"), msg);
 
             string yesterday = DateTime.Now.AddDays(-1).ToShortDateString();
@@ -177,6 +179,7 @@ namespace KCHWoodpecker
                     File.Delete(fn);
                 }
             }
+#endif
         }
 
         private void btnFlushLogs_Click(object sender, EventArgs e)

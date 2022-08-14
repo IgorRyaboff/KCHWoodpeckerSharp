@@ -16,6 +16,7 @@ namespace KCHWoodpecker
         public FormWaitingProcess()
         {
             InitializeComponent();
+            Text = $"Дятел {Application.ProductVersion}";
         }
 
         private void btnClose_Click(object sender, EventArgs e)
